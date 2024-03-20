@@ -1,0 +1,8 @@
+librosa
+numpy
+python_weather
+asyncio
+pickle
+selenium
+sklearn
+gtts
