@@ -144,6 +144,8 @@ if __name__ =="__main__":
             browser = Chrome(options = chrome_opt)
             browser.get(url)
             login = browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
+            login_apple = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
+
 
 
 
