@@ -13,11 +13,13 @@ from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from credemo import username,pwd
 import pyaudio
 
 span = None
 user = None
-
+options = webdriver.ChromeOptions()
 class AI():
 
     def __init__(self, name):
@@ -101,8 +103,49 @@ if __name__ =="__main__":
             ans = "I'm here to help you in whatever you need!"
             span = False
 
-        if fri.text == "hola friday":
+        if fri.text == "hola Friday":
             ans = "Estoy aqui para ayudarte!"
-            spanish = True
-            
+            span = True
+        
+        elif any(i in fri.text for i in ["Bye", "Goodbye", "See you", "See ya"]):
+            ans = np.random.choice(["Goodbye!","See you later!", "I'll see ya!", "See you later, boss."])
+            f = False
+
+        elif any(i in fri.text for i in ["search", "look"]):
+            words = fri.text.split("up")
+            if len(words)==2:
+                search_term = words[1].strip() 
+            def get_results(search_term):
+                url = "https://www.google.com"
+                chrome_options = Options()
+                chrome_options.add_experimental_option("detach", True)  
+                browser = Chrome(options = chrome_options)
+                browser.get(url)
+                search_box = browser.find_element(By.CLASS_NAME, "gLFyf")
+                search_box.send_keys(search_term)
+                search_box.submit()
+                try:
+                    links = browser.find_elements(By.XPATH, "//ol[@class='web_regular_results']//h3//a")
+                except:
+                    links = browser.find_elements(By.XPATH, "//h3//a")
+                results = []
+                for link in links:
+                    href = link.get_attribute("href")
+                    print(href)
+                    results.append(href)
+                return results
+            get_results(search_term)
+            res = "This is what I got"
+
+        elif any(i in fri.text for i in ["play", "Spotify"]):
+            url = "https://accounts.spotify.com/en/login"
+            chrome_opt = Options()
+            chrome_opt.add_experimental_option("detach", True)
+            browser = Chrome(options = chrome_opt)
+            browser.get(url)
+            login = browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
+
+
+
+
         fri.txt(ans)
