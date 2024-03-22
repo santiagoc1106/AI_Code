@@ -13,6 +13,12 @@ from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from credemo import username,pwd
 import pyaudio
@@ -54,7 +60,7 @@ class AI():
                 statbuf = os.stat("ans.mp3")
                 mbytes = statbuf.st_size / 1024
                 duration = mbytes / 200
-                os.system("start ans.mp3")
+                #os.system("start ans.mp3")
                 time.sleep(int(7*duration))
                 os.remove("ans.mp3")
             if span == True:
@@ -63,7 +69,7 @@ class AI():
                 statbuf = os.stat("ans.mp3")
                 mbytes = statbuf.st_size / 1024
                 duration = mbytes / 200
-                os.system("start ans.mp3")
+                #os.system("start ans.mp3")
                 time.sleep(int(7*duration))
                 os.remove("ans.mp3")
 
@@ -135,17 +141,21 @@ if __name__ =="__main__":
                     results.append(href)
                 return results
             get_results(search_term)
-            res = "This is what I got"
+            res = "This is what I found!"
 
-        elif any(i in fri.text for i in ["play", "Spotify"]):
+        elif any(i in fri.text for i in [ "Spotify"]):
             url = "https://accounts.spotify.com/en/login"
             chrome_opt = Options()
             chrome_opt.add_experimental_option("detach", True)
             browser = Chrome(options = chrome_opt)
             browser.get(url)
             login = browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
-            login_apple = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
-
+            login_user = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
+            click = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
+            time.sleep(3)
+            cont_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div/div/div/div[2]/div/div/div/div[1]/div[1]/button').click()
+            send_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[2]/div/div/input').send_keys(pwd)
+            click_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
 
 
 
