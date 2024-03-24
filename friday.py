@@ -20,11 +20,13 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
-from credemo import username,pwd
+#from credemo import username,pwd
 import pyaudio
-
+import sounddevice
 span = None
 user = None
+username = 'ay_itsyaboiii_1@icloud.com'
+pwd = 'James@2017santi'
 options = webdriver.ChromeOptions()
 class AI():
 
@@ -97,8 +99,8 @@ class AI():
 ##Wake Friday up
     def wake(self, text):
         return True if self.name in text.lower() else False
+    
 ##Run
-
 if __name__ =="__main__":
     fri = AI(name = "friday")
     f = True
@@ -143,20 +145,68 @@ if __name__ =="__main__":
             get_results(search_term)
             res = "This is what I found!"
 
-        elif any(i in fri.text for i in [ "Spotify"]):
-            url = "https://accounts.spotify.com/en/login"
+        elif any(i in fri.text for i in ["play"]):
             chrome_opt = Options()
-            chrome_opt.add_experimental_option("detach", True)
             browser = Chrome(options = chrome_opt)
-            browser.get(url)
-            login = browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
-            login_user = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
-            click = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
-            time.sleep(3)
-            cont_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div/div/div/div[2]/div/div/div/div[1]/div[1]/button').click()
-            send_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[2]/div/div/input').send_keys(pwd)
-            click_pass = browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
+            song = fri.text.split("play")
+            if len(song) == 2:
+                search = song[1].strip
 
+            def hover_and_click(song_name):
+                time.sleep(5)
+                a = ActionChains(browser)
+                hover = browser.find_element(By.XPATH, '//button[@aria-label="'+song_name+'"]')
+                a.move_to_element(hover).click().perform()
+                time.sleep(20)
+
+
+
+            def spotify(search):
+                #wait = WebDriverWait(browser, 10)
+                # elem = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="Desktop_LeftSidebar_Id"]/nav/div[1]/ul/li[2]/a')))
+                # elem = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[aria-label="Search"]')))
+                browser.find_element(By.XPATH, "/html/body/div[4]/div/div[2]/div[1]/nav/div[1]/ul/li[2]/a/svg[2]").click()
+                # inner_html = bar.get_attribute('innerHTML')
+                # song_soup = BeautifulSoup(inner_html, 'html.parser')
+                # all_tags = [tag for tag in song_soup.find_all()]
+                # for tag in all_tags:
+                #      tag_name = tag.name
+                #      if tag_name == 'a':
+                #          aria_name = tag['aria-label']
+                #          if aria_name[0] == "Search":
+                #              data_name = tag['data-context-menu-open']
+                #              hover_and_click(data_name)
+                # elem.click()
+                time.sleep(3)
+                #browser.find_element(By.XPATH, '//a[@href="/search"]').click()
+                time.sleep(3)
+                browser.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/div[3]/header/div[3]/div/div/form/input').send_keys(search)
+                # time.sleep(3)
+                # browser.find_element(By.XPATH, '//a[@href="/search/'+search+'/tracks"]').click()
+
+            def login():
+                url = "https://accounts.spotify.com/en/login"
+                chrome_opt = Options()
+                chrome_opt.add_experimental_option("detach", True)
+                browser = Chrome(options = chrome_opt)
+                browser.get(url)
+                browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
+                browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
+                browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
+                time.sleep(3)
+                browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div/div/div/div[2]/div/div/div/div[1]/div[1]/button').click()
+                browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[2]/div/div/input').send_keys(pwd)
+                browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/button[1]').click()
+                time.sleep(15)
+                wait = WebDriverWait(browser, 10)
+                elem = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div[2]/div/div/button[2]')))
+                elem.click()
+                time.sleep(20)
+                spotify(search)
+            login()
+            print(search)
+
+        
 
 
 
