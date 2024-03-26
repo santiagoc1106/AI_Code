@@ -146,8 +146,11 @@ if __name__ =="__main__":
             res = "This is what I found!"
 
         elif any(i in fri.text for i in ["play"]):
+
             chrome_opt = Options()
-            browser = Chrome(options = chrome_opt)
+            chrome_opt.add_experimental_option("detach", True)
+            browser = webdriver.Chrome(options = chrome_opt)
+
             song = fri.text.split("play")
             if len(song) == 2:
                 search = song[1].strip
@@ -162,10 +165,16 @@ if __name__ =="__main__":
 
 
             def spotify(search):
+                aw = browser.window_handles[0]
+                wa = browser.window_handles[1]
+                browser.switch_to.window(wa)
+                browser.maximize_window()
+                wait = WebDriverWait(browser, 5)
+                wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "YeKN11KAw61rZoyjcgZ DzWw3g4E_66wu9ktqn36"))).click()
                 #wait = WebDriverWait(browser, 10)
                 # elem = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="Desktop_LeftSidebar_Id"]/nav/div[1]/ul/li[2]/a')))
                 # elem = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[aria-label="Search"]')))
-                browser.find_element(By.XPATH, "/html/body/div[4]/div/div[2]/div[1]/nav/div[1]/ul/li[2]/a/svg[2]").click()
+                #browser.find_element(By.CLASS_NAME, "YeKN11KAw61rZoyjcgZ DzWw3g4E_66wu9ktqn36").click()
                 # inner_html = bar.get_attribute('innerHTML')
                 # song_soup = BeautifulSoup(inner_html, 'html.parser')
                 # all_tags = [tag for tag in song_soup.find_all()]
@@ -188,7 +197,7 @@ if __name__ =="__main__":
                 url = "https://accounts.spotify.com/en/login"
                 chrome_opt = Options()
                 chrome_opt.add_experimental_option("detach", True)
-                browser = Chrome(options = chrome_opt)
+                browser = webdriver.Chrome(options = chrome_opt)
                 browser.get(url)
                 browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div/div/ul/li[3]/button').click()
                 browser.find_element(By.XPATH, '/html/body/div[1]/oauth-init/div[1]/div/oauth-signin/div/apple-auth/div/div[1]/div/sign-in/div/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(username)
@@ -204,7 +213,7 @@ if __name__ =="__main__":
                 time.sleep(20)
                 spotify(search)
             login()
-            print(search)
+            print(song)
 
         
 
