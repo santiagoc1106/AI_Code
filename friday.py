@@ -20,6 +20,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
+from fastai.vision.all import * 
+#animals
+
 #from credemo import username,pwd
 import pyaudio
 import sounddevice
