@@ -218,6 +218,13 @@ if __name__ =="__main__":
             login()
             print(song)
 
+
+        elif any(i in fri.text for i in["show me a picture of dogs and cats"]):
+            path = untar_data(URLs.PETS)
+            files = get_image_files(path/"images")
+            def label_func(f): 
+                return f[0].isupper()
+            
         
 
 
